@@ -27,6 +27,11 @@ export default createGlobalStyle`
     border:none;
     border-radius: 4px;
     padding: 10px 20px;
+    transition: all 300ms;
+
+    &:hover {
+      filter: brightness(75%)
+    }
   }
 
   a {
