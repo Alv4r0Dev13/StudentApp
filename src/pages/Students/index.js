@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaUserCircle, FaWindowClose } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+// import secret from '../../secret';
 import axios from '../../services/axios';
 import { Container } from '../../styles/Global';
 import { ProfilePicture, StudentContainer } from './styled';
@@ -26,7 +27,11 @@ export default function Students() {
           <div key={String(student.id)}>
             <ProfilePicture>
               {get(student, 'Photos[0].url', false) ? (
-                <img src={student.Photos[0].url} alt="" />
+                <img
+                  // src={student.Photos[0].url.replace('localhost', secret.ip)}
+                  src={student.Photos[0].url}
+                  alt=""
+                />
               ) : (
                 <FaUserCircle size={36} />
               )}
