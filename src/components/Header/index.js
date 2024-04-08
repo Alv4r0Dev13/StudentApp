@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { Nav } from './styled';
 
 export default function Header() {
-  // const refresh = () => window.location.reload();
   return (
     <Nav>
       <Link to="/">
