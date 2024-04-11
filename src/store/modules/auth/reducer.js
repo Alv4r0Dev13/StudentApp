@@ -1,28 +1,27 @@
 import * as types from '../types';
 
 const initialState = {
-  isLogged: false,
+  isLoggedIn: false,
+  token: '',
+  user: {},
+  isLoading: false,
 };
 
 // eslint-disable-next-line default-param-last
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case types.LOGIN_REQUEST: {
-      // eslint-disable-next-line no-console
-      console.log('Login request...');
-      return state;
-    }
     case types.LOGIN_SUCCESS: {
-      // eslint-disable-next-line no-console
-      console.log('Login success');
       const newState = { ...state };
-      newState.isLogged = !newState.isLogged;
+      newState.isLoggedIn = !newState.isLoggedIn;
+      newState.token = action.payload.token;
+      newState.user = action.payload.user;
       return newState;
     }
     case types.LOGIN_FAILURE: {
       // eslint-disable-next-line no-console
       console.log('Login failed!');
-      return state;
+      const newState = { ...initialState };
+      return newState;
     }
     default:
       return state;

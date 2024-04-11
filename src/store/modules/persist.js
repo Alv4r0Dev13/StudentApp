@@ -6,7 +6,7 @@ export default (reducers) => {
     {
       key: 'STUDENT-APP',
       storage,
-      whitelist: ['login'],
+      whitelist: ['auth'],
     },
     reducers
   );

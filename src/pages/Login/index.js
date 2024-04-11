@@ -1,27 +1,63 @@
-import React from 'react';
+import { get } from 'lodash';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { isEmail } from 'validator';
+
 import { useDispatch } from 'react-redux';
-
-import * as loginActions from '../../store/modules/login/actions';
+import * as actions from '../../store/modules/auth/actions';
 import { Container } from '../../styles/Global';
-import { Title } from './styled';
+import { Form } from './styled';
 
-export default function Login() {
+export default function Login(props) {
   const dispatch = useDispatch();
-  const handleLogin = (e) => {
-    e.preventDefault();
-    dispatch(loginActions.loginPressRequest());
+  const prevPath = get(props, 'location.state.prevPath', '/');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (evt) => {
+    evt.preventDefault();
+    let formErrors = false;
+
+    if (!isEmail(email)) {
+      formErrors = true;
+      toast.error('Invalid e-mail!');
+    }
+
+    if (password.length < 8 || password.length > 50) {
+      formErrors = true;
+      toast.error('Invalid password!');
+    }
+
+    if (formErrors) return;
+
+    dispatch(actions.loginRequest({ email, password, prevPath }));
   };
   return (
     <Container>
-      <Title>Login</Title>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi laborum
-        reiciendis dolorum tempora commodi aperiam, alias in aliquid porro
-        itaque ipsa quos natus, a mollitia quam dolorem sed qui voluptas.
-      </p>
-      <button type="button" onClick={handleLogin}>
-        Salvar
-      </button>
+      <h1>Login</h1>
+      <Form onSubmit={handleLogin}>
+        <label htmlFor="email">
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@email.com"
+          />
+        </label>
+        <label htmlFor="password">
+          Password:
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="********"
+          />
+        </label>
+        <button type="submit">Login</button>
+      </Form>
     </Container>
   );
 }

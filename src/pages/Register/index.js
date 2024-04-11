@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-
 import { get } from 'lodash';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
+
 import axios from '../../services/axios';
 import history from '../../services/history';
 import { Container } from '../../styles/Global';
