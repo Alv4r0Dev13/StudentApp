@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 
+import Loading from '../../components/Loading';
 import axios from '../../services/axios';
 import history from '../../services/history';
 import { Container } from '../../styles/Global';
@@ -12,6 +13,7 @@ export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -34,6 +36,7 @@ export default function Register() {
     }
 
     if (formErrors) return;
+    setIsLoading(true);
 
     try {
       await axios.post('/users', {
@@ -42,16 +45,18 @@ export default function Register() {
         password,
       });
       toast.success('User registered successfully');
+      setIsLoading(false);
       history.push('/login');
     } catch (e) {
       const errors = get(e, 'response.data.errors', []);
-
+      setIsLoading(false);
       errors.map((err) => toast.error(err));
     }
   };
 
   return (
     <Container>
+      <Loading isLoading={isLoading} />
       <h1>Create account</h1>
 
       <Form onSubmit={handleSubmit}>
