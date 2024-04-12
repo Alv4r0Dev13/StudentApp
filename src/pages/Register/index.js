@@ -1,19 +1,31 @@
-import { get } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 
 import Loading from '../../components/Loading';
-import axios from '../../services/axios';
-import history from '../../services/history';
+import * as actions from '../../store/modules/auth/actions';
 import { Container } from '../../styles/Global';
 import { Form } from './styled';
 
 export default function Register() {
+  const dispatch = useDispatch();
+  const {
+    id,
+    name: storedName,
+    email: storedEmail,
+  } = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.auth.isLoading);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    setName(storedName);
+    setEmail(storedEmail);
+  }, [id, storedName, storedEmail]);
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -30,34 +42,19 @@ export default function Register() {
       toast.error('Invalid e-mail!');
     }
 
-    if (password.length < 8 || password.length > 50) {
+    if (!id && (password.length < 8 || password.length > 50)) {
       formErrors = true;
       toast.error('Password must be 8 to 50 characters long!');
     }
 
     if (formErrors) return;
-    setIsLoading(true);
-
-    try {
-      await axios.post('/users', {
-        name,
-        email,
-        password,
-      });
-      toast.success('User registered successfully');
-      setIsLoading(false);
-      history.push('/login');
-    } catch (e) {
-      const errors = get(e, 'response.data.errors', []);
-      setIsLoading(false);
-      errors.map((err) => toast.error(err));
-    }
+    dispatch(actions.registerRequest({ id, name, email, password }));
   };
 
   return (
     <Container>
       <Loading isLoading={isLoading} />
-      <h1>Create account</h1>
+      <h1>{id ? 'Edit user' : 'Create account'}</h1>
 
       <Form onSubmit={handleSubmit}>
         <label htmlFor="name">
@@ -93,7 +90,7 @@ export default function Register() {
           />
         </label>
 
-        <button type="submit">Create</button>
+        <button type="submit">{id ? 'Save' : 'Create'}</button>
       </Form>
     </Container>
   );
