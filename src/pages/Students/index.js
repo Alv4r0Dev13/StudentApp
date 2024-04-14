@@ -13,7 +13,7 @@ import Loading from '../../components/Loading';
 import secret from '../../secret';
 import axios from '../../services/axios';
 import { Container } from '../../styles/Global';
-import { ProfilePicture, StudentContainer } from './styled';
+import { NewStudent, ProfilePicture, StudentContainer } from './styled';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -58,6 +58,9 @@ export default function Students() {
     <Container>
       <Loading isLoading={isLoading} />
       <h1>Students</h1>
+
+      <NewStudent to="/student/">New student</NewStudent>
+
       <StudentContainer>
         {students.map((student, index) => (
           <div key={String(student.id)}>

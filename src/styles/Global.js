@@ -19,6 +19,10 @@ export default createGlobalStyle`
     background-color: ${colors.primaryDark}
   }
 
+  h1 {
+    text-align: center;
+  }
+
   button {
     cursor: pointer;
     color: #fff;
