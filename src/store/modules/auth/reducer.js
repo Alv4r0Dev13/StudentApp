@@ -1,3 +1,4 @@
+import axios from '../../../services/axios';
 import * as types from '../types';
 
 const initialState = {
@@ -24,8 +25,7 @@ export default function reducer(state = initialState, action) {
       return newState;
     }
     case types.LOGIN_FAILURE: {
-      // eslint-disable-next-line no-console
-      console.log('Login failed!');
+      delete axios.defaults.headers.Authorization;
       const newState = { ...initialState };
       return newState;
     }
