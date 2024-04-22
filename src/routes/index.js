@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import PrivateRoute from './private';
 
@@ -10,21 +10,40 @@ import Register from '../pages/Register';
 import Student from '../pages/Student';
 import Students from '../pages/Students';
 
-export default function Routes() {
+export default function AppRoutes() {
   return (
-    <Switch>
-      <PrivateRoute exact path="/" component={Students} />
-      <PrivateRoute
+    <Routes>
+      <Route exact path="/" element={<Students />} />
+      <Route
         exact
         path="/student/:id/edit"
-        component={Student}
-        isClosed
+        element={
+          <PrivateRoute>
+            <Student />
+          </PrivateRoute>
+        }
       />
-      <PrivateRoute exact path="/student/" component={Student} isClosed />
-      <PrivateRoute exact path="/photos/:id" component={Photos} isClosed />
-      <PrivateRoute exact path="/login" component={Login} />
-      <PrivateRoute exact path="/register" component={Register} />
-      <PrivateRoute path="*" component={Page404} />
-    </Switch>
+      <Route
+        exact
+        path="/student/"
+        element={
+          <PrivateRoute>
+            <Student />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        exact
+        path="/photos/:id"
+        element={
+          <PrivateRoute>
+            <Photos />
+          </PrivateRoute>
+        }
+      />
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/register" element={<Register />} />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
   );
 }

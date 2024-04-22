@@ -1,32 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-export default function PrivateRoute({
-  component: Component,
-  isClosed,
-  ...rest
-}) {
+export default function PrivateRoute({ children }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  if (isClosed && !isLoggedIn) {
-    return (
-      <Redirect
-        to={{ pathname: '/login', state: { prevPath: rest.location.pathname } }}
-      />
-    );
-  }
+  const location = useLocation();
+  if (!isLoggedIn) return <Navigate to="/login" state={location.pathname} />;
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Route {...rest} component={Component} />;
+  return children;
 }
 
-PrivateRoute.defaultProps = {
-  isClosed: false,
-};
-
 PrivateRoute.propTypes = {
-  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-    .isRequired,
-  isClosed: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
 };
