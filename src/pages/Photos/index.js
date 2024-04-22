@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import Loading from '../../components/Loading';
@@ -11,9 +12,10 @@ import * as actions from '../../store/modules/auth/actions';
 import { Container } from '../../styles/Global';
 import { Form } from './styled';
 
-export default function Photos({ match }) {
+export default function Photos() {
   const dispatch = useDispatch();
-  const id = get(match, 'params.id', '');
+  const params = useParams();
+  const { id } = params;
 
   const [isLoading, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState('');

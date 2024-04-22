@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaUserCircle } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { isEmail, isFloat, isInt } from 'validator';
 
@@ -15,10 +15,11 @@ import * as actions from '../../store/modules/auth/actions';
 import { Container } from '../../styles/Global';
 import { Form, ProfilePicture } from './styled';
 
-export default function Student({ match }) {
+export default function Student() {
   const dispatch = useDispatch();
+  const params = useParams();
 
-  const id = get(match, 'params.id', 0);
+  const { id } = params;
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
